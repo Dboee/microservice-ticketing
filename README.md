@@ -10,4 +10,4 @@
 
 ### To create a docker build use
 
-docker build -t username/auth .
+docker build -t username/ticketing .
