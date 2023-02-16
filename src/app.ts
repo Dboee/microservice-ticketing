@@ -18,6 +18,8 @@ import {
 // Routes
 import { createTicketRouter } from './routes/create';
 import { showTicketRouter } from './routes/show';
+import { indexTicketRouter } from './routes/index';
+import { updateTicketRouter } from './routes/update';
 
 // setup
 const port = 3000;
@@ -42,6 +44,8 @@ app.use(currentUser);
 //routes
 app.use(createTicketRouter);
 app.use(showTicketRouter);
+app.use(indexTicketRouter);
+app.use(updateTicketRouter);
 app.all('*', async (req, res) => {
   throw new NotFoundError();
 });

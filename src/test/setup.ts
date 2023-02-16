@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 
 declare global {
   var signin: () => string[];
+  // var generateId: () => string;
 }
 
 let mongo: any;
@@ -56,3 +57,7 @@ global.signin = () => {
   // return a string thats the cookie with the encoded data
   return [`session=${base64}`];
 };
+
+// global.generateId = () => {
+//   return new mongoose.Types.ObjectId().toHexString();
+// };
