@@ -17,6 +17,7 @@ import {
 
 // Routes
 import { createTicketRouter } from './routes/create';
+import { showTicketRouter } from './routes/show';
 
 // setup
 const port = 3000;
@@ -40,6 +41,7 @@ app.use(currentUser);
 
 //routes
 app.use(createTicketRouter);
+app.use(showTicketRouter);
 app.all('*', async (req, res) => {
   throw new NotFoundError();
 });
