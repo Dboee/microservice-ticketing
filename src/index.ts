@@ -26,6 +26,7 @@ const start = async () => {
     console.error(err);
     throw new DatabaseConnectionError();
   }
+
   app.listen(port, () => {
     console.log('Listening on port:', port);
   });

@@ -3,11 +3,11 @@ import mongoose from 'mongoose';
 
 import request from 'supertest';
 import { app } from '../app';
+import jwt from 'jsonwebtoken';
 
 declare global {
-	var signin: () => Promise<string[]>;
+  var signin: () => string[];
 }
-
 
 let mongo: any;
 beforeAll(async () => {
@@ -33,25 +33,26 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-
-
 // This is a global function that is available in all test files.
+global.signin = () => {
+  // Build a JWT payload. { id, email }
+  const payload = {
+    id: new mongoose.Types.ObjectId().toHexString(),
+    email: 'hello@world.com',
+    username: 'hello',
+  };
+  // Create the JWT!
+  const token = jwt.sign(payload, process.env.JWT_KEY!);
 
+  // Build session Object. { jwt: MY_JWT }
+  const session = { jwt: token };
 
-global.signin = async () => {
-	const email = 'test@test.com';
-	const password = 'password';
+  // Turn that session into JSON
+  const sessionJSON = JSON.stringify(session);
 
+  // Take JSON and encode it as base64
+  const base64 = Buffer.from(sessionJSON).toString('base64');
 
-	const response = await request(app)
-	.post('/api/users/signup')
-	.send({
-		email, password
-	})
-	.expect(201);
-
-	const cookie = response.get('Set-Cookie');
-
-	return cookie;
+  // return a string thats the cookie with the encoded data
+  return [`session=${base64}`];
 };
-

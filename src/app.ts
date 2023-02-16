@@ -9,8 +9,14 @@ import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 
 // Middlewares
-import { errorHandler } from '@delight-system/microservice-common';
-import { NotFoundError } from '@delight-system/microservice-common';
+import {
+  errorHandler,
+  NotFoundError,
+  currentUser,
+} from '@delight-system/microservice-common';
+
+// Routes
+import { createTicketRouter } from './routes/create';
 
 // setup
 const port = 3000;
@@ -29,13 +35,16 @@ app.use(
     secure: process.env.NODE_ENV !== 'test' ? true : false,
   })
 );
+// check if user is logged in
+app.use(currentUser);
 
 //routes
-
-// Middlewares
+app.use(createTicketRouter);
 app.all('*', async (req, res) => {
   throw new NotFoundError();
 });
+
+// Middlewares
 app.use(errorHandler);
 
 export { app, port };
