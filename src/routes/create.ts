@@ -5,7 +5,11 @@ import {
   validateRequest,
 } from '@delight-system/microservice-common';
 
+// DB Imports
 import { Ticket } from '../models/ticket';
+
+// Event Imports
+import { TicketCreatedPublisher } from '../events/publishers/ticket-created-publisher';
 
 const router = express.Router();
 
@@ -32,6 +36,13 @@ router.post(
       userId: req.currentUser!.id,
     });
     await ticket.save();
+    // Publishes the ticket created event
+    new TicketCreatedPublisher().publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId,
+    });
 
     res.status(201).send(ticket);
   }
