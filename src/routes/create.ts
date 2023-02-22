@@ -37,12 +37,26 @@ router.post(
     });
     await ticket.save();
     // Publishes the ticket created event
-    new TicketCreatedPublisher().publish({
+    await new TicketCreatedPublisher().publish({
       id: ticket.id,
       title: ticket.title,
       price: ticket.price,
       userId: ticket.userId,
     });
+
+    // Handles publish failures, removes the ticket from the DB if the event fails to publish
+    try {
+      await new TicketCreatedPublisher().publish({
+        id: ticket.id,
+        title: ticket.title,
+        price: ticket.price,
+        userId: ticket.userId,
+      });
+    } catch (err) {
+      console.error(err);
+      await ticket.remove();
+      console.log('Ticket removed from DB, since the event failed to publish');
+    }
 
     res.status(201).send(ticket);
   }
