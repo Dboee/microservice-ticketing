@@ -7,6 +7,9 @@ import jwt from 'jsonwebtoken';
 
 jest.setTimeout(30000);
 
+jest.mock('../events/publishers/ticket-created-publisher.ts');
+jest.mock('../events/publishers/ticket-updated-publisher.ts');
+
 declare global {
   var signin: () => string[];
   // var generateId: () => string;

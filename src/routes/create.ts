@@ -36,16 +36,9 @@ router.post(
       userId: req.currentUser!.id,
     });
     await ticket.save();
-    // Publishes the ticket created event
-    await new TicketCreatedPublisher().publish({
-      id: ticket.id,
-      title: ticket.title,
-      price: ticket.price,
-      userId: ticket.userId,
-    });
 
-    // Handles publish failures, removes the ticket from the DB if the event fails to publish
     try {
+      // Publishes the event to Azure Event Hub
       await new TicketCreatedPublisher().publish({
         id: ticket.id,
         title: ticket.title,
@@ -53,6 +46,7 @@ router.post(
         userId: ticket.userId,
       });
     } catch (err) {
+      // Handles publish failures, removes the ticket from the DB if the event fails to publish
       console.error(err);
       await ticket.remove();
       console.log('Ticket removed from DB, since the event failed to publish');
