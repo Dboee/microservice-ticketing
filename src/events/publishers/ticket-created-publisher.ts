@@ -7,18 +7,13 @@ import {
 
 export class TicketCreatedPublisher extends Publisher<ITicketCreatedEvent> {
   //   Azure specific properties
-  eventHubName: EventHubs;
+  readonly eventHubName: EventHubs.Tickets = EventHubs.Tickets;
   readonly consumerGroup = ConsumerGroups.TicketCreated;
 
   constructor() {
     // Azure specific properties
-    const eventHubName: EventHubs = EventHubs.Tickets;
-    const consumerGroup = ConsumerGroups.TicketCreated;
 
     // Calls constructor of Listener, passing in the eventHubName and consumerGroup
-    super(eventHubName, consumerGroup);
-
-    // Sets the subject property
-    this.eventHubName = eventHubName;
+    super(EventHubs.Tickets, ConsumerGroups.TicketCreated);
   }
 }
