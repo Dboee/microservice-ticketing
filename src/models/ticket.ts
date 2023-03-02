@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 // defines the shape or structure of an object that represents a ticket.
 interface ITicketAttrs {
@@ -12,6 +13,7 @@ interface ITicketDoc extends mongoose.Document {
   title: string;
   price: number;
   userId: string;
+  version: number;
   // The document will have some additional properties that are not defined here
   // like _id, __v, and createdAt, inherited from mongoose
 }
@@ -60,6 +62,10 @@ const ticketSchema = new mongoose.Schema(
     },
   }
 );
+
+// This is a mongoose plugin that adds a version property to the document
+ticketSchema.set('versionKey', 'version');
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 // This makes sure that the user is created with the correct properties
 // and that the properties are of the correct type
