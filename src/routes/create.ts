@@ -41,6 +41,7 @@ router.post(
       // Publishes the event to Azure Event Hub
       await new TicketCreatedPublisher().publish({
         id: ticket.id,
+        version: ticket.version,
         title: ticket.title,
         price: ticket.price,
         userId: ticket.userId,
