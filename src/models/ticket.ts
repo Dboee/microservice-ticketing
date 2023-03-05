@@ -14,6 +14,7 @@ interface ITicketDoc extends mongoose.Document {
   price: number;
   userId: string;
   version: number;
+  orderId?: string;
   // The document will have some additional properties that are not defined here
   // like _id, __v, and createdAt, inherited from mongoose
 }
@@ -49,6 +50,10 @@ const ticketSchema = new mongoose.Schema(
     userId: {
       type: String,
       required: true,
+    },
+    orderId: {
+      type: String,
+      required: false,
     },
   },
   {
