@@ -5,6 +5,7 @@ import {
   NotFoundError,
   requireAuth,
   UnauthorizedError,
+  BadRequestError,
 } from '@delight-system/microservice-common';
 
 import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
@@ -29,6 +30,10 @@ router.put(
 
     if (!ticket) {
       throw new NotFoundError();
+    }
+
+    if (ticket.orderId) {
+      throw new BadRequestError('Cannot edit a reserved ticket');
     }
 
     if (!backupTicket) {

@@ -3,10 +3,12 @@
 
 //DB
 import mongoose from 'mongoose';
-
 import { DatabaseConnectionError } from '@delight-system/microservice-common';
-
 import { app, port } from './app';
+
+// Listeners
+import { OrderCreatedListener } from './events/listeners/order-created-listener';
+import { OrderCancelledListener } from './events/listeners/order-cancelled-listener';
 
 const start = async () => {
   // Check if JWT_KEY is defined
@@ -16,6 +18,14 @@ const start = async () => {
   // Check if MONGO_URI is defined
   if (!process.env.MONGO_URI) {
     throw new Error('MONGO_URI must be defined');
+  }
+
+  // Start the listeners
+  try {
+    await new OrderCreatedListener().listen();
+    await new OrderCancelledListener().listen();
+  } catch (err) {
+    console.error(err);
   }
 
   // DB
