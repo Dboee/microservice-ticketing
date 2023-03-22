@@ -21,12 +21,12 @@ const start = async () => {
   }
 
   // Start the listeners
-  try {
-    await new OrderCreatedListener().listen();
-    await new OrderCancelledListener().listen();
-  } catch (err) {
-    console.error(err);
-  }
+  // try {
+  //   await new OrderCreatedListener().listen();
+  //   await new OrderCancelledListener().listen();
+  // } catch (err) {
+  //   console.error(err);
+  // }
 
   // DB
   try {
