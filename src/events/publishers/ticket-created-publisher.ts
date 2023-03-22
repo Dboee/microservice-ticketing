@@ -14,6 +14,6 @@ export class TicketCreatedPublisher extends Publisher<ITicketCreatedEvent> {
     // Azure specific properties
 
     // Calls constructor of Listener, passing in the eventHubName and consumerGroup
-    super(EventHubs.Tickets, ConsumerGroups.TicketCreated);
+    super();
   }
 }
