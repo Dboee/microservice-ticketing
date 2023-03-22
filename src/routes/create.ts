@@ -11,6 +11,10 @@ import { Ticket } from '../models/ticket';
 // Event Imports
 import { TicketCreatedPublisher } from '../events/publishers/ticket-created-publisher';
 
+// Producer Client
+import { ticketCreatedClient } from '../index';
+import { Subjects } from '@delight-system/microservice-common';
+
 const router = express.Router();
 
 router.post(
@@ -39,12 +43,15 @@ router.post(
 
     try {
       // Publishes the event to Azure Event Hub
-      await new TicketCreatedPublisher().publish({
+      await new TicketCreatedPublisher(ticketCreatedClient).publish({
         id: ticket.id,
         version: ticket.version,
         title: ticket.title,
         price: ticket.price,
         userId: ticket.userId,
+        properties: {
+          subject: Subjects.TicketCreated,
+        },
       });
     } catch (err) {
       // Handles publish failures, removes the ticket from the DB if the event fails to publish
